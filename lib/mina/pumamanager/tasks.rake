@@ -6,11 +6,11 @@ namespace :pumamanager do
 
   desc 'Setup puma-manager'
   task :setup => :environment do
-    queue %(echo "-----> Setup the puma-manager")
+    command %(echo "-----> Setup the puma-manager")
 
     puma_conf_content = erb(puma_conf_template).gsub(/(["$])/){"\\#{$1}"}
     puma_conf_temp = "#{deploy_to}/#{shared_path}/puma.conf"
-    queue! %[
+    command %[
       if [ -e '#{upstart_dir}/puma.conf' ]; then
         echo '#{upstart_dir}/puma.conf is existed!';
       else
@@ -21,7 +21,7 @@ namespace :pumamanager do
 
     puma_manager_conf_content = erb(puma_manager_conf_template).gsub(/(["$])/){"\\#{$1}"}
     puma_manager_conf_temp = "#{deploy_to}/#{shared_path}/puma-manager.conf"
-    queue %[
+    command %[
       if [ -e '#{upstart_dir}/puma_manager.conf' ]; then
         echo '#{upstart_dir}/puma_manager.conf is existed!';
       else
@@ -31,7 +31,7 @@ namespace :pumamanager do
     ]
 
     app_path = "#{deploy_to}/current"
-    queue! %[
+    command %[
       if ! [ -e '#{puma_app_list}' ]; then
         sudo touch #{puma_app_list}
         sudo chmod o+rw #{puma_app_list}
@@ -44,15 +44,15 @@ namespace :pumamanager do
   end
 
   task :start => :environment do
-    queue %(sudo start puma-manager)
+    command %(sudo start puma-manager)
   end
 
   task :stop => :environment do
-    queue %(sudo stop puma-manager)
+    command %(sudo stop puma-manager)
   end
 
   task :restart => :environment do
-    queue %(sudo restart puma-manager)
+    command %(sudo restart puma-manager)
   end
 
   private
