@@ -1,8 +1,8 @@
 namespace :pumamanager do
 
-  set_default :puma_role,         -> { user }
-  set_default :puma_app_list,     "/etc/puma.conf"
-  set_default :upstart_dir,       "/etc/init"
+  set :puma_role,         -> { user }
+  set :puma_app_list,     "/etc/puma.conf"
+  set :upstart_dir,       "/etc/init"
 
   desc 'Setup puma-manager'
   task :setup => :environment do
